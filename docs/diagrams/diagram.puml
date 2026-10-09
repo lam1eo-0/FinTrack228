@@ -1,0 +1,71 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+skinparam rectangle {
+    BorderColor black
+    BackgroundColor #F8F9FA
+}
+
+actor "Бухгалтер" as accountant
+actor "Руководитель" as manager
+
+rectangle "FinTrack - Учёт расходов/доходов небольшой фирмы" {
+
+    ' --- ЛЕВЫЙ РЯД ПРЕЦЕДЕНТОВ ---
+    usecase "Добавить доход" as add_inc
+    usecase "Добавить расход" as add_exp
+    usecase "Редактировать\nоперацию" as edit_op
+    usecase "Удалить операцию" as del_op
+    usecase "Просмотреть\nоперации" as view_ops
+    usecase "Поиск операций" as search_ops
+    add_inc -[hidden]down-> add_exp
+    add_exp -[hidden]down-> edit_op
+    edit_op -[hidden]down-> del_op
+    del_op -[hidden]down-> view_ops
+    view_ops -[hidden]down-> search_ops
+
+    ' --- ЦЕНТРАЛЬНЫЙ РЯД ---
+    usecase "Авторизация" as auth
+    usecase "Расчет доходов\nи расходов" as calc_inc_exp
+    usecase "Расчет прибыли" as calc_profit
+    usecase "Формирование\nотчетов" as make_reports
+    auth -[hidden]down-> calc_inc_exp
+    calc_inc_exp -[hidden]down-> calc_profit
+    calc_profit -[hidden]down-> make_reports
+
+    ' --- ПРАВЫЙ РЯД ПРЕЦЕДЕНТОВ ---
+    usecase "Просмотр доходов" as view_inc
+    usecase "Просмотр расходов" as view_exp
+    usecase "Просмотр прибыли" as view_profit
+    usecase "Просмотр отчетов" as view_reports
+    view_inc -[hidden]down-> view_exp
+    view_exp -[hidden]down-> view_profit
+    view_profit -[hidden]down-> view_reports
+}
+
+' --- СВЯЗИ БУХГАЛТЕРА ---
+accountant --> auth
+accountant --> add_inc
+accountant --> add_exp
+accountant --> edit_op
+accountant --> del_op
+accountant --> view_ops
+accountant --> search_ops
+
+' --- ВНУТРЕННИЕ СВЯЗИ INCLUDE ---
+add_inc .right.> calc_inc_exp : include
+add_exp .right.> calc_inc_exp : include
+edit_op .right.> calc_inc_exp : include
+
+calc_inc_exp .down.> calc_profit : include
+calc_profit .down.> make_reports : include
+
+' --- СВЯЗИ РУКОВОДИТЕЛЯ ---
+auth <-- manager
+view_inc <-- manager
+view_exp <-- manager
+view_profit <-- manager
+view_reports <-- manager
+
+@enduml
