@@ -67,8 +67,7 @@ INSERT INTO Roles (role_name) VALUES
     ('Бухгалтер'),
     ('Руководитель');
 
--- Тестовые пользователи. Демонстрационные PBKDF2-хеши, не реальные учётные данные.
--- Пароли здесь не хранятся в открытом виде; вход в систему не реализован этой ЛР.
+
 INSERT INTO Users (login, password_hash, full_name, role_id) VALUES
     ('accountant', 'pbkdf2_sha256$150000$demo_salt_1$16232b49608151a884d73256b1b1e22bfae1182bf6406e4cc09fa6b090a9e61d', 'Иванова Анна Петровна', 1),
     ('manager', 'pbkdf2_sha256$150000$demo_salt_2$9be262cac0df7ba50d915a326a7aa2948e91009fe81157c0e9221eb4c431cf07', 'Петров Сергей Иванович', 2);
