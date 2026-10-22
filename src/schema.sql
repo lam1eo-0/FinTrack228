@@ -1,5 +1,6 @@
 -- FinTrack: учёт доходов и расходов небольшой фирмы
-
+-- Лабораторная работа № 3. Проектирование и реализация базы данных.
+-- СУБД: SQLite. Скрипт создаёт структуру и тестовые записи заново.
 PRAGMA foreign_keys = ON;
 
 -- Удаление зависимых таблиц перед родительскими
@@ -9,18 +10,24 @@ DROP TABLE IF EXISTS Categories;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Roles;
 
+-- Структура таблиц синхронизирована с ER-диаграммой: 
+-- Roles.description, Users.username/is_active, Reports.report_name/period_start/period_end/created_at.
+-- Показатели total_income, total_expense и profit сохранены для расчётов FinTrack.
+
 -- 1. Роли пользователей: бухгалтер и руководитель
 CREATE TABLE Roles (
     role_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    role_name TEXT NOT NULL UNIQUE
+    role_name TEXT NOT NULL UNIQUE,
+    description TEXT
 );
 
 -- 2. Пользователи системы
 CREATE TABLE Users (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    login TEXT NOT NULL UNIQUE,
+    username TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
     full_name TEXT NOT NULL,
+    is_active INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0, 1)),
     role_id INTEGER NOT NULL,
     FOREIGN KEY (role_id) REFERENCES Roles(role_id)
         ON UPDATE CASCADE ON DELETE RESTRICT
@@ -52,25 +59,28 @@ CREATE TABLE Operations (
 CREATE TABLE Reports (
     report_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
-    date_start TEXT NOT NULL CHECK (date_start GLOB '????-??-??'),
-    date_end TEXT NOT NULL CHECK (date_end GLOB '????-??-??'),
+    report_name TEXT NOT NULL,
+    period_start TEXT NOT NULL CHECK (period_start GLOB '????-??-??'),
+    period_end TEXT NOT NULL CHECK (period_end GLOB '????-??-??'),
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     total_income REAL NOT NULL CHECK (total_income >= 0),
     total_expense REAL NOT NULL CHECK (total_expense >= 0),
     profit REAL NOT NULL,
-    CHECK (date_start <= date_end),
+    CHECK (period_start <= period_end),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
         ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 -- Тестовые значения ролей
-INSERT INTO Roles (role_name) VALUES
-    ('Бухгалтер'),
-    ('Руководитель');
+INSERT INTO Roles (role_name, description) VALUES
+    ('Бухгалтер', 'Основной пользователь: добавление и редактирование операций, формирование отчётов'),
+    ('Руководитель', 'Просмотр операций, финансовых показателей и отчётов');
 
-
-INSERT INTO Users (login, password_hash, full_name, role_id) VALUES
-    ('accountant', 'pbkdf2_sha256$150000$demo_salt_1$16232b49608151a884d73256b1b1e22bfae1182bf6406e4cc09fa6b090a9e61d', 'Иванова Анна Петровна', 1),
-    ('manager', 'pbkdf2_sha256$150000$demo_salt_2$9be262cac0df7ba50d915a326a7aa2948e91009fe81157c0e9221eb4c431cf07', 'Петров Сергей Иванович', 2);
+-- Тестовые пользователи. Демонстрационные PBKDF2-хеши, не реальные учётные данные.
+-- Пароли здесь не хранятся в открытом виде; вход в систему не реализован этой ЛР.
+INSERT INTO Users (username, password_hash, full_name, is_active, role_id) VALUES
+    ('accountant', 'pbkdf2_sha256$150000$demo_salt_1$16232b49608151a884d73256b1b1e22bfae1182bf6406e4cc09fa6b090a9e61d', 'Иванова Анна Петровна', 1, 1),
+    ('manager', 'pbkdf2_sha256$150000$demo_salt_2$9be262cac0df7ba50d915a326a7aa2948e91009fe81157c0e9221eb4c431cf07', 'Петров Сергей Иванович', 1, 2);
 
 -- Категории доходов и расходов
 INSERT INTO Categories (category_name, operation_type) VALUES
@@ -98,24 +108,24 @@ INSERT INTO Operations (user_id, category_id, amount, operation_date, descriptio
 
 -- Отчёты формируются на основе операций с помощью агрегирования SUM.
 -- Таблица Reports хранит результаты на момент формирования.
-INSERT INTO Reports (user_id, date_start, date_end, total_income, total_expense, profit)
-SELECT 1, '2026-09-01', '2026-09-30',
+INSERT INTO Reports (user_id, report_name, period_start, period_end, total_income, total_expense, profit)
+SELECT 1, 'Отчёт за сентябрь 2026', '2026-09-01', '2026-09-30',
        COALESCE(SUM(CASE WHEN c.operation_type = 'income' THEN o.amount ELSE 0 END), 0),
        COALESCE(SUM(CASE WHEN c.operation_type = 'expense' THEN o.amount ELSE 0 END), 0),
        COALESCE(SUM(CASE WHEN c.operation_type = 'income' THEN o.amount ELSE -o.amount END), 0)
 FROM Operations o JOIN Categories c ON c.category_id = o.category_id
 WHERE o.operation_date BETWEEN '2026-09-01' AND '2026-09-30';
 
-INSERT INTO Reports (user_id, date_start, date_end, total_income, total_expense, profit)
-SELECT 1, '2026-10-01', '2026-10-31',
+INSERT INTO Reports (user_id, report_name, period_start, period_end, total_income, total_expense, profit)
+SELECT 1, 'Отчёт за октябрь 2026', '2026-10-01', '2026-10-31',
        COALESCE(SUM(CASE WHEN c.operation_type = 'income' THEN o.amount ELSE 0 END), 0),
        COALESCE(SUM(CASE WHEN c.operation_type = 'expense' THEN o.amount ELSE 0 END), 0),
        COALESCE(SUM(CASE WHEN c.operation_type = 'income' THEN o.amount ELSE -o.amount END), 0)
 FROM Operations o JOIN Categories c ON c.category_id = o.category_id
 WHERE o.operation_date BETWEEN '2026-10-01' AND '2026-10-31';
 
-INSERT INTO Reports (user_id, date_start, date_end, total_income, total_expense, profit)
-SELECT 1, '2026-09-01', '2026-10-31',
+INSERT INTO Reports (user_id, report_name, period_start, period_end, total_income, total_expense, profit)
+SELECT 1, 'Отчёт за сентябрь–октябрь 2026', '2026-09-01', '2026-10-31',
        COALESCE(SUM(CASE WHEN c.operation_type = 'income' THEN o.amount ELSE 0 END), 0),
        COALESCE(SUM(CASE WHEN c.operation_type = 'expense' THEN o.amount ELSE 0 END), 0),
        COALESCE(SUM(CASE WHEN c.operation_type = 'income' THEN o.amount ELSE -o.amount END), 0)
