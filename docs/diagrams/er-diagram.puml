@@ -1,0 +1,46 @@
+@startuml
+hide circle
+skinparam linetype ortho
+skinparam entityBackgroundColor #EDF4FF
+entity "Roles" {
+  * role_id : INTEGER <<PK>>
+  * role_name : TEXT
+  description : TEXT
+}
+entity "Users" {
+  * user_id : INTEGER <<PK>>
+  * username : TEXT
+  * password_hash : TEXT
+  * full_name : TEXT
+  * is_active : INTEGER
+  * role_id : INTEGER <<FK>>
+}
+entity "Categories" {
+  * category_id : INTEGER <<PK>>
+  * category_name : TEXT
+  * operation_type : TEXT
+}
+entity "Operations" {
+  * operation_id : INTEGER <<PK>>
+  * user_id : INTEGER <<FK>>
+  * category_id : INTEGER <<FK>>
+  * amount : REAL
+  * operation_date : TEXT
+  description : TEXT
+}
+entity "Reports" {
+  * report_id : INTEGER <<PK>>
+  * user_id : INTEGER <<FK>>
+  * report_name : TEXT
+  * period_start : TEXT
+  * period_end : TEXT
+  * created_at : TEXT
+  * total_income : REAL
+  * total_expense : REAL
+  * profit : REAL
+}
+Roles ||--o{ Users : role_id
+Users ||--o{ Operations : user_id
+Categories ||--o{ Operations : category_id
+Users ||--o{ Reports : user_id
+@enduml
