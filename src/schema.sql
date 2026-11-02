@@ -67,8 +67,8 @@ INSERT INTO Roles (role_id, role_name, description) VALUES
     (2, 'Руководитель', 'Просмотр и поиск операций и отчётов');
 
 INSERT INTO Users (user_id, username, password_hash, full_name, is_active, role_id) VALUES
-    (1, 'accountant', 'pbkdf2_sha256$150000$demo_salt_1$16232b49608151a884d73256b1b1e22bfae1182bf6406e4cc09fa6b090a9e61d', 'Иванова Анна Петровна', 1, 1),
-    (2, 'manager', 'pbkdf2_sha256$150000$demo_salt_2$9be262cac0df7ba50d915a326a7aa2948e91009fe81157c0e9221eb4c431cf07', 'Петров Сергей Иванович', 1, 2);
+    (1, 'accountant', 'pbkdf2_sha256$260000$3a09937b2a0c3cbf7238228026300737$315bb122d7d25980d7e90468271fb7d77e3deb966f762d5b2893d5cdab9a73b2', 'Иванова Анна Петровна', 1, 1),
+    (2, 'manager', 'pbkdf2_sha256$260000$f38cc396a64d67dc7737c40c1ce12463$50756d0f747a8f7bd8046256187ac18fb9e0656557736bf2732c31dccdcbe6d7', 'Петров Сергей Иванович', 1, 2);
 
 INSERT INTO Categories (category_id, category_name, operation_type) VALUES
     (1, 'Продажа товаров', 'income'),

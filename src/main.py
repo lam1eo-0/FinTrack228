@@ -1,60 +1,53 @@
-"""Создание учебной базы и проверка её структуры и целостности."""
+"""FinTrack. Консольный финансовый учёт небольшой фирмы."""
 
 import argparse
-from pathlib import Path
 import sqlite3
+
+import database
+from services.common import ServiceError
+from services.diagnostics_service import check_database
+from ui.menus import application_menu
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--init", action="store_true", help="создать отсутствующую БД из schema.sql")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--init", action="store_true", help="создать отсутствующую базу и завершить работу")
+    actions.add_argument("--check", action="store_true", help="проверить базу и завершить работу")
+    parser.add_argument("--database", help="путь к отдельному файлу SQLite")
     args = parser.parse_args()
-    source_dir = Path(__file__).resolve().parent
-    database_path = source_dir / "fintrack.db"
-
-    if args.init:
-        schema = (source_dir / "schema.sql").read_text(encoding="utf-8")
-        try:
-            with database_path.open("xb"):
-                pass
-        except FileExistsError:
-            parser.exit(1, "База уже существует. Для пересоздания сначала переместите её в резервную копию.\n")
-        conn = None
-        try:
-            with sqlite3.connect(database_path) as conn:
-                conn.executescript(schema)
-        except Exception:
-            if conn is not None:
-                conn.close()
-            database_path.unlink()
-            raise
-        conn.close()
-        print("База создана из schema.sql.")
-
+    if args.database:
+        database.configure(args.database)
     try:
-        conn = sqlite3.connect(database_path.as_uri() + "?mode=ro", uri=True)
-    except sqlite3.OperationalError:
-        parser.exit(1, "Не удалось открыть базу рядом с main.py. Создать её можно командой с --init.\n")
-
-    try:
-        conn.execute("PRAGMA foreign_keys = ON")
-        for table in ("Roles", "Users", "Categories", "Operations", "Reports"):
-            count = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
-            columns = conn.execute(f"PRAGMA table_info({table})").fetchall()
-            print(f"{table}: {count} записей")
-            print("Поля:", ", ".join(f"{column[1]} {column[2]}" for column in columns))
-
-        integrity = conn.execute("PRAGMA integrity_check").fetchall()
-        foreign_keys = conn.execute("PRAGMA foreign_key_check").fetchall()
-        print("Целостность:", integrity)
-        print("Ошибки связей:", foreign_keys)
+        if args.init:
+            database.initialize()
+            print("База создана. Запустите программу без --init для работы с меню.")
+            return 0
+        if not database.DATABASE_PATH.is_file():
+            print("База отсутствует. Создайте её командой с --init.")
+            return 1
+        tables, integrity, foreign_keys = check_database()
+        if args.check:
+            for name, count, columns in tables:
+                print(f"{name}: {count} записей")
+                print("Поля:", ", ".join(f"{name} {kind}" for name, kind in columns))
+            print("Целостность:", integrity)
+            print("Ошибки связей:", foreign_keys)
         if integrity != [("ok",)] or foreign_keys:
-            parser.exit(1, "Проверка базы выявила ошибки.\n")
-    except sqlite3.DatabaseError as error:
-        parser.exit(1, f"Ошибка базы данных: {error}\n")
-    finally:
-        conn.close()
+            print("Проверка базы выявила ошибки.")
+            return 1
+        if not args.check:
+            application_menu()
+    except FileExistsError:
+        print("База уже существует. --init создаёт только новый файл.")
+        return 1
+    except (ServiceError, OSError, sqlite3.DatabaseError) as error:
+        print(f"Ошибка: {error}")
+        return 1
+    except (EOFError, KeyboardInterrupt):
+        print("\nРабота завершена.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
