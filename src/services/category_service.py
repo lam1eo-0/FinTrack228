@@ -2,10 +2,15 @@ from repositories.category_repository import CategoryRepository
 from services.common import ServiceError, require_user, required_text, session, valid_type
 
 
-def list_categories(actor_id):
+def list_categories(actor_id, operation_type=""):
+    if operation_type:
+        valid_type(operation_type)
     with session() as conn:
         require_user(conn, actor_id)
-        return CategoryRepository(conn).get_all()
+        categories = CategoryRepository(conn).get_all()
+        if not operation_type:
+            return categories
+        return [item for item in categories if item.operation_type == operation_type]
 
 
 def save_category(actor_id, name, operation_type, category_id=None):

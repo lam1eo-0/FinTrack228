@@ -42,10 +42,10 @@ class UserRepository:
     def change_password(self, user_id, password_hash):
         self.conn.execute("UPDATE Users SET password_hash = ? WHERE user_id = ?", (password_hash, user_id))
 
-    def count_active_accountants(self):
+    def count_active_by_role(self, role_name):
         return self.conn.execute(
             """SELECT COUNT(*) FROM Users u JOIN Roles r ON r.role_id = u.role_id
-               WHERE u.is_active = 1 AND r.role_name = 'Бухгалтер'"""
+               WHERE u.is_active = 1 AND r.role_name = ?""", (role_name,)
         ).fetchone()[0]
 
     def delete(self, user_id):

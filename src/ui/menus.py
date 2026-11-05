@@ -1,12 +1,14 @@
 from services import category_service, operation_service, report_service, user_service
-from services.common import ACCOUNTANT, ServiceError
+from services.common import ACCOUNTANT, MANAGER, ServiceError
 from ui import auth
 from ui.common import ask, ask_int, confirm, menu, new_password
 
 
-def show_categories(actor_id):
-    for item in category_service.list_categories(actor_id):
+def show_categories(actor_id, operation_type=""):
+    categories = category_service.list_categories(actor_id, operation_type)
+    for item in categories:
         print(f"{item.category_id}. {item.category_name} ({item.operation_type})")
+    return categories
 
 
 def ask_type(default=None):
@@ -75,8 +77,13 @@ def edit_operation(actor_id, operation_type="", editing=False):
     old = None
     if editing:
         old = operation_service.get_operation(actor_id, ask_int("ID операции"))
-    show_categories(actor_id)
+        operation_type = old.operation_type
+    categories = show_categories(actor_id, operation_type)
+    if not categories:
+        raise ServiceError("Нет категорий для этого типа операции. Добавьте категорию в меню управления.")
     category_id = ask_int("ID категории", old.category_id if old else None)
+    if not any(item.category_id == category_id for item in categories):
+        raise ServiceError("Выберите ID из показанного списка категорий.")
     amount = ask("Сумма", old.amount if old else None)
     operation_date = ask("Дата ГГГГ-ММ-ДД", old.operation_date if old else None)
     description = ask("Описание", old.description if old else None)
@@ -212,8 +219,9 @@ def user_menu(actor_id):
             ("Удалить операцию", lambda: delete_operation(actor_id)),
             ("Управление категориями", lambda: categories_menu(actor_id)),
             ("Управление отчётами", lambda: reports_menu(actor_id)),
-            ("Управление пользователями", lambda: users_menu(actor_id)),
         ]
+    elif user.role_name == MANAGER:
+        actions.append(("Управление пользователями", lambda: users_menu(actor_id)))
     print(f"\nВыполнен вход: {user.full_name} ({user.role_name})")
     menu("FinTrack", actions)
 

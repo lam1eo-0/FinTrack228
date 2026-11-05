@@ -23,10 +23,13 @@ def main():
             database.initialize()
             print("База создана. Запустите программу без --init для работы с меню.")
             return 0
+        if not args.database:
+            database.prepare_default_database()
         if not database.DATABASE_PATH.is_file():
             print("База отсутствует. Создайте её командой с --init.")
             return 1
         tables, integrity, foreign_keys = check_database()
+        print(f"Файл базы: {database.DATABASE_PATH}")
         if args.check:
             for name, count, columns in tables:
                 print(f"{name}: {count} записей")
