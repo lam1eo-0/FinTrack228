@@ -5,13 +5,13 @@ from services.common import (
 )
 
 
-def list_operations(actor_id, start="0001-01-01", end="9999-12-31", query="", operation_type=""):
+def list_operations(actor_id, start="0001-01-01", end="9999-12-31", query="", operation_type="", *, category_id=None):
     start, end = valid_period(start, end)
     if operation_type:
         valid_type(operation_type)
     with session() as conn:
         require_user(conn, actor_id)
-        return OperationRepository(conn).get_all(start, end, query.strip(), operation_type)
+        return OperationRepository(conn).get_all(start, end, query.strip(), operation_type, category_id=category_id)
 
 
 def get_operation(actor_id, operation_id):

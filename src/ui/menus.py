@@ -201,7 +201,7 @@ def user_menu(actor_id):
         ("Поиск операций", lambda: search_operations(actor_id)),
         ("Финансовые показатели за период", lambda: show_summary(actor_id)),
         ("Просмотр отчётов", lambda: show_reports(actor_id)),
-        ("Просмотр категорий", lambda: show_categories(actor_id)),
+        ("Просмотр категорий", lambda: browse_categories(actor_id)),
         ("Сменить свой пароль", lambda: auth.change_password(actor_id)),
     ]
     if user.role_name == ACCOUNTANT:
@@ -226,4 +226,20 @@ def application_menu():
     menu("Добро пожаловать в FinTrack", [
         ("Войти", sign_in),
         ("Зарегистрироваться", auth.register),
+    ])
+
+
+def browse_categories(actor_id):
+    categories = category_service.list_categories(actor_id)
+    if not categories:
+        print("Категорий нет.")
+        return
+
+    def show_category_operations(category):
+        print(f"\nОперации категории «{category.category_name}»")
+        print_operations(operation_service.list_operations(actor_id, category_id=category.category_id))
+
+    menu("Выберите категорию", [
+        (f"{item.category_name} ({item.operation_type})", lambda item=item: show_category_operations(item))
+        for item in categories
     ])

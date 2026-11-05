@@ -19,13 +19,14 @@ class OperationRepository:
         row = self.conn.execute(SELECT_OPERATIONS + " WHERE o.operation_id = ?", (operation_id,)).fetchone()
         return Operation(**dict(row)) if row else None
 
-    def get_all(self, start="0001-01-01", end="9999-12-31", query="", operation_type=""):
+    def get_all(self, start="0001-01-01", end="9999-12-31", query="", operation_type="", *, category_id=None):
         rows = self.conn.execute(
             SELECT_OPERATIONS + """
             WHERE o.operation_date BETWEEN ? AND ?
               AND (? = '' OR c.operation_type = ?)
+              AND (? IS NULL OR o.category_id = ?)
             ORDER BY o.operation_date DESC, o.operation_id DESC
-            """, (start, end, operation_type, operation_type)
+            """, (start, end, operation_type, operation_type, category_id, category_id)
         )
         operations = [Operation(**dict(row)) for row in rows]
         needle = query.casefold()

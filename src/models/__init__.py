@@ -1,4 +1,4 @@
-#Объекты данных FinTrack.
+"""Объекты данных FinTrack."""
 
 from dataclasses import dataclass, field
 

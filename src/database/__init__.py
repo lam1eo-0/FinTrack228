@@ -1,4 +1,4 @@
-#Подключение, транзакции и создание базы.
+"""Подключение, транзакции и создание базы."""
 
 from contextlib import contextmanager
 from pathlib import Path
@@ -16,7 +16,7 @@ def configure(path):
 
 @contextmanager
 def get_connection(write=False):
-#Транзакция охватывает проверки сервиса и все вызовы репозиториев.
+    """Транзакция охватывает проверки сервиса и все вызовы репозиториев."""
     mode = "rw" if write else "ro"
     conn = sqlite3.connect(DATABASE_PATH.as_uri() + f"?mode={mode}", uri=True, timeout=10)
     conn.row_factory = sqlite3.Row
