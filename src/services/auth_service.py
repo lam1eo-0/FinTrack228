@@ -5,11 +5,12 @@ import secrets
 from repositories.role_repository import RoleRepository
 from repositories.user_repository import UserRepository
 from services.common import (
-    MANAGER, ServiceError, require_user, required_text, session, valid_username,
+    ACCOUNTANT, MANAGER, ServiceError, require_user, required_text, session, valid_username,
 )
 
 
 ITERATIONS = 260000
+REGISTRATION_ROLES = (ACCOUNTANT, MANAGER)
 
 
 def hash_password(password):
@@ -40,7 +41,9 @@ def authenticate(username, password):
         return require_user(conn, user.user_id)
 
 
-def register(username, password, full_name):
+def register(username, password, full_name, role_name):
+    if role_name not in REGISTRATION_ROLES:
+        raise ServiceError("Выберите роль бухгалтера или руководителя.")
     username = valid_username(username)
     full_name = required_text(full_name, "ФИО")
     password_hash = hash_password(password)
@@ -48,9 +51,9 @@ def register(username, password, full_name):
         users = UserRepository(conn)
         if users.get_by_username(username):
             raise ServiceError("Пользователь с таким логином уже существует.")
-        role = RoleRepository(conn).get_by_name(MANAGER)
+        role = RoleRepository(conn).get_by_name(role_name)
         if role is None:
-            raise ServiceError("В базе отсутствует роль руководителя.")
+            raise ServiceError(f"В базе отсутствует роль «{role_name}».")
         return users.create(username, password_hash, full_name, role.role_id)
 
 

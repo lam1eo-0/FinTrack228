@@ -1,5 +1,6 @@
 from services import auth_service
-from ui.common import ask, new_password, password
+from services.common import ServiceError
+from ui.common import ask, ask_int, new_password, password
 
 
 def login():
@@ -8,11 +9,20 @@ def login():
 
 
 def register():
-    print("Самостоятельная регистрация создаёт пользователя с ролью руководителя.")
+    roles = auth_service.REGISTRATION_ROLES
+    print("Выберите роль нового пользователя:")
+    for number, role_name in enumerate(roles, 1):
+        print(f"{number}. {role_name}")
+    print("0. Отмена")
+    choice = ask_int("Номер роли")
+    if choice == 0:
+        return
+    if not 1 <= choice <= len(roles):
+        raise ServiceError("Такой роли нет в меню.")
     username = ask("Логин")
     full_name = ask("ФИО")
-    user = auth_service.register(username, new_password(), full_name)
-    print(f"Пользователь {user.username} зарегистрирован. Выполните вход.")
+    user = auth_service.register(username, new_password(), full_name, roles[choice - 1])
+    print(f"Пользователь {user.username} зарегистрирован. Роль: {user.role_name}. Выполните вход.")
 
 
 def change_password(actor_id):

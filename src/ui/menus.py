@@ -225,5 +225,5 @@ def application_menu():
 
     menu("Добро пожаловать в FinTrack", [
         ("Войти", sign_in),
-        ("Зарегистрироваться как руководитель", auth.register),
+        ("Зарегистрироваться", auth.register),
     ])
