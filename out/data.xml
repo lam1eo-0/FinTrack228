@@ -1,0 +1,303 @@
+<?xml version='1.0' encoding='utf-8'?>
+<operations>
+  <record>
+    <operation_id>1</operation_id>
+    <user_id>1</user_id>
+    <category_id>1</category_id>
+    <amount>70000.0</amount>
+    <operation_date>2026-09-03</operation_date>
+    <description>Продажа партии товаров</description>
+    <categories>
+      <category_id>1</category_id>
+      <category_name>Продажа товаров</category_name>
+      <operation_type>income</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>2</operation_id>
+    <user_id>1</user_id>
+    <category_id>2</category_id>
+    <amount>25000.0</amount>
+    <operation_date>2026-09-08</operation_date>
+    <description>Оплата консультационных услуг</description>
+    <categories>
+      <category_id>2</category_id>
+      <category_name>Оказание услуг</category_name>
+      <operation_type>income</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>3</operation_id>
+    <user_id>1</user_id>
+    <category_id>3</category_id>
+    <amount>18000.0</amount>
+    <operation_date>2026-09-10</operation_date>
+    <description>Аренда офиса за сентябрь</description>
+    <categories>
+      <category_id>3</category_id>
+      <category_name>Аренда помещения</category_name>
+      <operation_type>expense</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>4</operation_id>
+    <user_id>1</user_id>
+    <category_id>4</category_id>
+    <amount>35000.0</amount>
+    <operation_date>2026-09-15</operation_date>
+    <description>Заработная плата за сентябрь</description>
+    <categories>
+      <category_id>4</category_id>
+      <category_name>Заработная плата</category_name>
+      <operation_type>expense</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>5</operation_id>
+    <user_id>1</user_id>
+    <category_id>5</category_id>
+    <amount>2500.0</amount>
+    <operation_date>2026-09-17</operation_date>
+    <description>Покупка бумаги и папок</description>
+    <categories>
+      <category_id>5</category_id>
+      <category_name>Канцелярские товары</category_name>
+      <operation_type>expense</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>6</operation_id>
+    <user_id>1</user_id>
+    <category_id>1</category_id>
+    <amount>42000.0</amount>
+    <operation_date>2026-09-23</operation_date>
+    <description>Продажа товаров клиенту</description>
+    <categories>
+      <category_id>1</category_id>
+      <category_name>Продажа товаров</category_name>
+      <operation_type>income</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>7</operation_id>
+    <user_id>1</user_id>
+    <category_id>1</category_id>
+    <amount>85000.0</amount>
+    <operation_date>2026-10-02</operation_date>
+    <description>Продажа товаров</description>
+    <categories>
+      <category_id>1</category_id>
+      <category_name>Продажа товаров</category_name>
+      <operation_type>income</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>8</operation_id>
+    <user_id>1</user_id>
+    <category_id>2</category_id>
+    <amount>30000.0</amount>
+    <operation_date>2026-10-06</operation_date>
+    <description>Оказание услуг</description>
+    <categories>
+      <category_id>2</category_id>
+      <category_name>Оказание услуг</category_name>
+      <operation_type>income</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>9</operation_id>
+    <user_id>1</user_id>
+    <category_id>3</category_id>
+    <amount>18000.0</amount>
+    <operation_date>2026-10-10</operation_date>
+    <description>Аренда офиса за октябрь</description>
+    <categories>
+      <category_id>3</category_id>
+      <category_name>Аренда помещения</category_name>
+      <operation_type>expense</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>10</operation_id>
+    <user_id>1</user_id>
+    <category_id>4</category_id>
+    <amount>35000.0</amount>
+    <operation_date>2026-10-15</operation_date>
+    <description>Заработная плата за октябрь</description>
+    <categories>
+      <category_id>4</category_id>
+      <category_name>Заработная плата</category_name>
+      <operation_type>expense</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>11</operation_id>
+    <user_id>1</user_id>
+    <category_id>6</category_id>
+    <amount>7000.0</amount>
+    <operation_date>2026-10-18</operation_date>
+    <description>Продвижение услуг</description>
+    <categories>
+      <category_id>6</category_id>
+      <category_name>Реклама</category_name>
+      <operation_type>expense</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+  <record>
+    <operation_id>12</operation_id>
+    <user_id>1</user_id>
+    <category_id>5</category_id>
+    <amount>3000.0</amount>
+    <operation_date>2026-10-20</operation_date>
+    <description>Канцелярские принадлежности</description>
+    <categories>
+      <category_id>5</category_id>
+      <category_name>Канцелярские товары</category_name>
+      <operation_type>expense</operation_type>
+    </categories>
+    <users>
+      <user_id>1</user_id>
+      <username>accountant</username>
+      <full_name>Иванова Анна Петровна</full_name>
+      <is_active>1</is_active>
+      <role_id>1</role_id>
+      <roles>
+        <role_id>1</role_id>
+        <role_name>Бухгалтер</role_name>
+        <description>Ведение операций и формирование отчётов</description>
+      </roles>
+    </users>
+  </record>
+</operations>
